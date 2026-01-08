@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kanjiquiz.app.App
+import com.example.kanjiquiz.data.VocabEntry
+import com.example.kanjiquiz.data.VocabRepository
 import com.example.kanjiquiz.ui.theme.KanjiQuizTheme
 
 
@@ -181,8 +183,19 @@ private fun ScreenCard(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun Preview() {
     KanjiQuizTheme {
-
+        val viewModel = MainViewModel(object : VocabRepository {
+            override suspend fun getAll(): List<VocabEntry> = listOf(
+                VocabEntry(
+                    id = 1,
+                    expression = "犬",
+                    reading = "いぬ",
+                    meaning = "dog",
+                    vocabSet = "jlpt-n5"
+                )
+            )
+        })
+        MainScreen(viewModel)
     }
 }
