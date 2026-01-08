@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -57,9 +59,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
+    val stateData by viewModel.stateData.collectAsState()
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
-        when (viewModel.quizState.value) {
+        when (stateData.quizState) {
             QuizState.Question -> Question(
                 viewModel = viewModel,
                 modifier = modifier
@@ -100,18 +103,18 @@ private fun Empty(modifier: Modifier) {
 
 @Composable
 private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-    val currentItem = viewModel.currentItem.value
-    if (currentItem == null)
-        return
+    val stateData by viewModel.stateData.collectAsState()
+    val currentItem = stateData.currentItem ?: return
+
     val focusRequester = remember {FocusRequester()}
     ScreenCard(modifier) {
         Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(12.dp))
         TextField(
-            value = viewModel.answer.value,
+            value = stateData.answer,
             singleLine = true,
-            onValueChange = { viewModel.answer.value = it },
+            onValueChange = viewModel::setAnswer,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
             keyboardActions = KeyboardActions(onSend = { viewModel.submit() }),
             label = { Text("Enter text", fontSize = 20.sp) },
@@ -119,8 +122,8 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
         )
 
-        if(viewModel.validationMessage.value!="") {
-            Text(viewModel.validationMessage.value,
+        if(stateData.validationMessage!="") {
+            Text(stateData.validationMessage,
                 fontSize = 20.sp, color = Color.Red, modifier = Modifier.fillMaxWidth())
         }
 
@@ -147,7 +150,8 @@ private fun Answer(
     isAnswerCorrect: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val currentItem = viewModel.currentItem.value ?: return
+    val stateData by viewModel.stateData.collectAsState()
+    val currentItem = stateData.currentItem ?: return
     ScreenCard(modifier) {
 
         Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
@@ -162,7 +166,7 @@ private fun Answer(
         )
 
         Text(
-            "Your answer: ${viewModel.answer.value}",
+            "Your answer: ${stateData.answer}",
             fontSize = 25.sp,
             modifier = Modifier.fillMaxWidth()
         )

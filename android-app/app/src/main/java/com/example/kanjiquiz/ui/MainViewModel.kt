@@ -1,22 +1,27 @@
 package com.example.kanjiquiz.ui
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kanjiquiz.data.VocabEntry
 import dev.esnault.wanakana.core.Wanakana
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+data class StateData(
+    val currentItem: VocabEntry? = null,
+    val quizState: QuizState = QuizState.Loading,
+    val answer: String = "",
+    var validationMessage: String = ""
+)
 
 enum class QuizState { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
 class MainViewModel(private val repository: VocabRepository) : ViewModel() {
 
     private var vocabList: List<VocabEntry> = emptyList()
-
-    val answer = mutableStateOf("")
-    val validationMessage = mutableStateOf("")
-
-    val currentItem = mutableStateOf<VocabEntry?>(null)
-    val quizState = mutableStateOf(QuizState.Loading)
+    private val _stateData = MutableStateFlow(StateData())
+    val stateData: StateFlow<StateData> = _stateData.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -25,46 +30,47 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
         }
     }
 
-
+    fun setAnswer(answer: String) {
+        _stateData.value = _stateData.value.copy(answer=answer)
+    }
     fun submit() {
-        if (quizState.value != QuizState.Question)
-            return
         if (answerContainsKanji()) {
-            validationMessage.value = "Answer should not contain Kanji"
+            _stateData.value =
+                _stateData.value.copy(validationMessage = "Answer should not contain Kanji")
             return
         }
-        validationMessage.value = ""
-
-        quizState.value =
-            if (isAnswerCorrect()) QuizState.CorrectAnswer else QuizState.IncorrectAnswer
+        _stateData.value = _stateData.value.copy(
+            validationMessage = "",
+            quizState = if (isAnswerCorrect()) QuizState.CorrectAnswer else QuizState.IncorrectAnswer
+        )
     }
 
     fun next() {
-        if (quizState.value !in setOf(QuizState.CorrectAnswer, QuizState.IncorrectAnswer))
-            return
         reset()
     }
 
     private fun answerContainsKanji(): Boolean =
-        this.answer.value.any(Wanakana::isKanji)
+        _stateData.value.answer.any(Wanakana::isKanji)
 
     private fun isAnswerCorrect(): Boolean {
-        val currentItem = this.currentItem.value
+        val currentItem = _stateData.value.currentItem
         if (currentItem == null)
             return false
-        val answer = this.answer.value.trim().trim('～', '-')
+        val answer = _stateData.value.answer.trim().trim('～', '-')
         val hiraganaAnswer = Wanakana.toHiragana(answer)
 
         val reading = currentItem.reading.trim().trim('～', '-')
-        return answer==reading || hiraganaAnswer==reading
+        return answer == reading || hiraganaAnswer == reading
     }
 
     private fun reset() {
-        currentItem.value = vocabList.randomOrNull()
-        quizState.value = if (currentItem.value == null)
-            QuizState.Empty
-        else
-            QuizState.Question
-        answer.value = ""
+        val currentItem = vocabList.randomOrNull()
+        _stateData.value = _stateData.value.copy(
+            currentItem = currentItem,
+            quizState = if (currentItem == null) QuizState.Empty else QuizState.Question,
+            answer = ""
+        )
     }
+
+
 }
