@@ -106,6 +106,12 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
             modifier = Modifier.fillMaxWidth()
         )
+
+        if(viewModel.validationMessage.value!="") {
+            Text(viewModel.validationMessage.value,
+                fontSize = 20.sp, color = Color.Red, modifier = Modifier.fillMaxWidth())
+        }
+
         Spacer(modifier = Modifier.weight(1f))
 
         Button(onClick = { viewModel.submit() }, Modifier

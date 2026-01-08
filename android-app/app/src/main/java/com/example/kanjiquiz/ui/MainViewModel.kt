@@ -13,6 +13,7 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
     private var vocabList: List<VocabEntry> = emptyList()
 
     val answer = mutableStateOf("")
+    val validationMessage = mutableStateOf("")
 
     val currentItem = mutableStateOf<VocabEntry?>(null)
     val quizState = mutableStateOf(QuizState.Loading)
@@ -26,8 +27,14 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
 
 
     fun submit() {
-        if (quizState.value!= QuizState.Question)
+        if (quizState.value != QuizState.Question)
             return
+        if (answerContainsKanji()) {
+            validationMessage.value = "Answer should not contain Kanji"
+            return
+        }
+        validationMessage.value = ""
+
         quizState.value =
             if (isAnswerCorrect()) QuizState.CorrectAnswer else QuizState.IncorrectAnswer
     }
@@ -38,6 +45,9 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
         reset()
     }
 
+    private fun answerContainsKanji(): Boolean =
+        this.answer.value.any(Wanakana::isKanji)
+
     private fun isAnswerCorrect(): Boolean {
         val currentItem = this.currentItem.value
         if (currentItem == null)
@@ -46,9 +56,7 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
         val hiraganaAnswer = Wanakana.toHiragana(answer)
 
         val reading = currentItem.reading.trim().trim('～', '-')
-        return answer == reading
-                || hiraganaAnswer == currentItem.reading
-                || answer == currentItem.expression
+        return answer==reading || hiraganaAnswer==reading
     }
 
     private fun reset() {
