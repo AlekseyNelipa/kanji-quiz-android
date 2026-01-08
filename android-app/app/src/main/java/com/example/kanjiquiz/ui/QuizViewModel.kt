@@ -9,19 +9,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-data class StateData(
-    val currentItem: VocabEntry? = null,
-    val quizState: QuizState = QuizState.Loading,
-    val answer: String = "",
-    var validationMessage: String = ""
-)
-
-enum class QuizState { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
+enum class QuizPhase { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
 class MainViewModel(private val repository: VocabRepository) : ViewModel() {
 
     private var vocabList: List<VocabEntry> = emptyList()
-    private val _stateData = MutableStateFlow(StateData())
-    val stateData: StateFlow<StateData> = _stateData.asStateFlow()
+    private val _stateData = MutableStateFlow(QuizUiState())
+    val stateData: StateFlow<QuizUiState> = _stateData.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -41,7 +34,7 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
         }
         _stateData.value = _stateData.value.copy(
             validationMessage = "",
-            quizState = if (isAnswerCorrect()) QuizState.CorrectAnswer else QuizState.IncorrectAnswer
+            quizPhase = if (isAnswerCorrect()) QuizPhase.CorrectAnswer else QuizPhase.IncorrectAnswer
         )
     }
 
@@ -53,21 +46,20 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
         _stateData.value.answer.any(Wanakana::isKanji)
 
     private fun isAnswerCorrect(): Boolean {
-        val currentItem = _stateData.value.currentItem
-        if (currentItem == null)
-            return false
+        val currentEntry = _stateData.value.currentEntry ?: return false
+
         val answer = _stateData.value.answer.trim().trim('～', '-')
         val hiraganaAnswer = Wanakana.toHiragana(answer)
 
-        val reading = currentItem.reading.trim().trim('～', '-')
+        val reading = currentEntry.reading.trim().trim('～', '-')
         return answer == reading || hiraganaAnswer == reading
     }
 
     private fun reset() {
-        val currentItem = vocabList.randomOrNull()
+        val currentEntry = vocabList.randomOrNull()
         _stateData.value = _stateData.value.copy(
-            currentItem = currentItem,
-            quizState = if (currentItem == null) QuizState.Empty else QuizState.Question,
+            currentEntry = currentEntry,
+            quizPhase = if (currentEntry == null) QuizPhase.Empty else QuizPhase.Question,
             answer = ""
         )
     }

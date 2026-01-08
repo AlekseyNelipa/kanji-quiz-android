@@ -43,7 +43,7 @@ import com.example.kanjiquiz.ui.theme.KanjiQuizTheme
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels {
         val app = application as App
-        MainViewModelFactory(app.vocabRepository)
+        QuizViewModelFactory(app.vocabRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,26 +62,26 @@ fun MainScreen(viewModel: MainViewModel) {
     val stateData by viewModel.stateData.collectAsState()
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
-        when (stateData.quizState) {
-            QuizState.Question -> Question(
+        when (stateData.quizPhase) {
+            QuizPhase.Question -> Question(
                 viewModel = viewModel,
                 modifier = modifier
             )
 
-            QuizState.CorrectAnswer -> Answer(
+            QuizPhase.CorrectAnswer -> Answer(
                 viewModel = viewModel,
                 isAnswerCorrect = true,
                 modifier = modifier
             )
 
-            QuizState.IncorrectAnswer -> Answer(
+            QuizPhase.IncorrectAnswer -> Answer(
                 viewModel = viewModel,
                 isAnswerCorrect = false,
                 modifier = modifier
             )
 
-            QuizState.Loading -> Loading(modifier = modifier)
-            QuizState.Empty -> Empty(modifier = modifier)
+            QuizPhase.Loading -> Loading(modifier = modifier)
+            QuizPhase.Empty -> Empty(modifier = modifier)
         }
     }
 }
@@ -104,11 +104,11 @@ private fun Empty(modifier: Modifier) {
 @Composable
 private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val stateData by viewModel.stateData.collectAsState()
-    val currentItem = stateData.currentItem ?: return
+    val currentEntry = stateData.currentEntry ?: return
 
     val focusRequester = remember {FocusRequester()}
     ScreenCard(modifier) {
-        Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(12.dp))
         TextField(
@@ -151,10 +151,10 @@ private fun Answer(
     modifier: Modifier = Modifier
 ) {
     val stateData by viewModel.stateData.collectAsState()
-    val currentItem = stateData.currentItem ?: return
+    val currentEntry = stateData.currentEntry ?: return
     ScreenCard(modifier) {
 
-        Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -171,12 +171,12 @@ private fun Answer(
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            "Correct: ${currentItem.reading}",
+            "Correct: ${currentEntry.reading}",
             fontSize = 25.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            "Meaning: ${currentItem.meaning}",
+            "Meaning: ${currentEntry.meaning}",
             fontSize = 25.sp,
             modifier = Modifier.fillMaxWidth()
         )
