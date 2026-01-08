@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -101,7 +102,10 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(12.dp))
         TextField(
             value = viewModel.answer.value,
+            singleLine = true,
             onValueChange = { viewModel.answer.value = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(onSend = { viewModel.submit() }),
             label = { Text("Enter text", fontSize = 20.sp) },
             textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
             modifier = Modifier.fillMaxWidth()
