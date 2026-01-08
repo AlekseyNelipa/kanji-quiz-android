@@ -1,0 +1,97 @@
+####################################
+# Android / Gradle
+####################################
+
+# Built application files
+*.apk
+*.aab
+
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Android Studio captures
+captures/
+
+# Generated files
+bin/
+gen/
+
+# Keystore files
+*.jks
+*.keystore
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Lint / tooling
+lint/
+lint-results*.xml
+lint-results*.html
+
+####################################
+# Kotlin
+####################################
+
+# Kotlin build artifacts
+out/
+.kotlin/
+
+####################################
+# OS
+####################################
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+####################################
+# Logs
+####################################
+
+*.log
+
+####################################
+# Jupyter / Python
+####################################
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+####################################
+# Misc
+####################################
+
+# Temporary files
+*.swp
+*.swo
+*~

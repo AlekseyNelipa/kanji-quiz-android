@@ -1,0 +1,71 @@
+package com.example.kanjiquiz.ui
+
+import android.app.Application
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.kanjiquiz.app.App
+import com.example.kanjiquiz.data.VocabEntry
+import dev.esnault.wanakana.core.Wanakana
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+enum class QuizState { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
+class MainViewModel(app: Application) : AndroidViewModel(app) {
+
+    private var vocabList: List<VocabEntry> = emptyList()
+    private val db = (app as App).db
+
+
+    val answer = mutableStateOf("")
+
+    val currentItem = mutableStateOf<VocabEntry?>(null)
+    val quizState = mutableStateOf(QuizState.Loading)
+
+    init {
+        viewModelScope.launch {
+            vocabList = withContext(Dispatchers.IO) {
+                db.entriesDao().getAll()
+            }
+
+            reset()
+        }
+    }
+
+
+    fun submit() {
+        if (quizState.value!= QuizState.Question)
+            return
+        quizState.value =
+            if (isAnswerCorrect()) QuizState.CorrectAnswer else QuizState.IncorrectAnswer
+    }
+
+    fun next() {
+        if (quizState.value !in setOf(QuizState.CorrectAnswer, QuizState.IncorrectAnswer))
+            return
+        reset()
+    }
+
+    private fun isAnswerCorrect(): Boolean {
+        val currentItem = this.currentItem.value
+        if (currentItem == null)
+            return false
+        val answer = this.answer.value.trim().trim('～', '-')
+        val hiraganaAnswer = Wanakana.toHiragana(answer)
+
+        val reading = currentItem.reading.trim().trim('～', '-')
+        return answer == reading
+                || hiraganaAnswer == currentItem.reading
+                || answer == currentItem.expression
+    }
+
+    private fun reset() {
+        currentItem.value = vocabList.randomOrNull()
+        quizState.value = if (currentItem.value == null)
+            QuizState.Empty
+        else
+            QuizState.Question
+        answer.value = ""
+    }
+}
