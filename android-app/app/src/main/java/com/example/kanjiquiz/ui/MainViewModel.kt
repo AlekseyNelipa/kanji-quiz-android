@@ -1,10 +1,9 @@
 package com.example.kanjiquiz.ui
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kanjiquiz.app.App
+import com.example.kanjiquiz.data.VocabRepository
 import com.example.kanjiquiz.data.VocabEntry
 import dev.esnault.wanakana.core.Wanakana
 import kotlinx.coroutines.Dispatchers
@@ -12,11 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 enum class QuizState { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class MainViewModel(private val repository: VocabRepository) : ViewModel() {
 
     private var vocabList: List<VocabEntry> = emptyList()
-    private val db = (app as App).db
-
 
     val answer = mutableStateOf("")
 
@@ -26,7 +23,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     init {
         viewModelScope.launch {
             vocabList = withContext(Dispatchers.IO) {
-                db.entriesDao().getAll()
+                repository.getAll()
+
             }
 
             reset()
