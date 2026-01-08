@@ -40,132 +40,144 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KanjiQuizTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    when (viewModel.quizState.value) {
-                        QuizState.Question -> Question(
-                            viewModel = viewModel,
-                            modifier = Modifier.padding(innerPadding)
-                        )
-
-                        QuizState.CorrectAnswer -> Answer(
-                            viewModel = viewModel,
-                            isAnswerCorrect = true,
-                            modifier = Modifier.padding(innerPadding)
-                        )
-
-                        QuizState.IncorrectAnswer -> Answer(
-                            viewModel = viewModel,
-                            isAnswerCorrect = false,
-                            modifier = Modifier.padding(innerPadding)
-                        )
-
-                        QuizState.Loading -> Loading(modifier = Modifier.padding(innerPadding))
-                        QuizState.Empty -> Empty(modifier = Modifier.padding(innerPadding))
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun Loading(modifier: Modifier) {
-        ScreenCard(modifier) {
-            Text("Loading", fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
-        }
-    }
-
-    @Composable
-    private fun Empty(modifier: Modifier) {
-        ScreenCard(modifier) {
-            Text("Empty", fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
-        }
-    }
-
-
-    @Composable
-    private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-        val currentItem = viewModel.currentItem.value
-        if (currentItem == null)
-            return
-        ScreenCard(modifier) {
-            Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
-
-            Spacer(modifier = Modifier.height(12.dp))
-            TextField(
-                value = viewModel.answer.value,
-                onValueChange = { viewModel.answer.value = it },
-                label = { Text("Enter text", fontSize = 20.sp) },
-                textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.weight(1f))
-
-            Button(onClick = { viewModel.submit() }, Modifier.fillMaxWidth().size(64.dp)) {
-                Text("Submit", fontSize = 25.sp)
-            }
-
-        }
-    }
-
-    @Composable
-    private fun Answer(
-        viewModel: MainViewModel,
-        isAnswerCorrect: Boolean,
-        modifier: Modifier = Modifier
-    ) {
-        val currentItem = viewModel.currentItem.value ?: return
-        ScreenCard(modifier) {
-
-            Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(if (isAnswerCorrect) "Correct" else "Wrong",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                color = if(isAnswerCorrect) Color.Green else Color.Red)
-
-            Text(
-                "Your answer: ${viewModel.answer.value}",
-                fontSize = 25.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                "Correct: ${currentItem.reading}",
-                fontSize = 25.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                "Meaning: ${currentItem.meaning}",
-                fontSize = 25.sp,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Button(onClick = { viewModel.next() }, Modifier.fillMaxWidth().size(64.dp)) {
-                Text("Next", fontSize = 25.sp)
-            }
-        }
-
-    }
-
-    @Composable
-    private fun ScreenCard(
-        modifier: Modifier = Modifier,
-        content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit
-    ) {
-        Card(modifier = modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                content()
+                MainScreen(viewModel)
             }
         }
     }
 }
+
+@Composable
+fun MainScreen(viewModel: MainViewModel) {
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        when (viewModel.quizState.value) {
+            QuizState.Question -> Question(
+                viewModel = viewModel,
+                modifier = Modifier.padding(innerPadding)
+            )
+
+            QuizState.CorrectAnswer -> Answer(
+                viewModel = viewModel,
+                isAnswerCorrect = true,
+                modifier = Modifier.padding(innerPadding)
+            )
+
+            QuizState.IncorrectAnswer -> Answer(
+                viewModel = viewModel,
+                isAnswerCorrect = false,
+                modifier = Modifier.padding(innerPadding)
+            )
+
+            QuizState.Loading -> Loading(modifier = Modifier.padding(innerPadding))
+            QuizState.Empty -> Empty(modifier = Modifier.padding(innerPadding))
+        }
+    }
+}
+
+@Composable
+private fun Loading(modifier: Modifier) {
+    ScreenCard(modifier) {
+        Text("Loading", fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+    }
+}
+
+@Composable
+private fun Empty(modifier: Modifier) {
+    ScreenCard(modifier) {
+        Text("Empty", fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+    }
+}
+
+
+@Composable
+private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    val currentItem = viewModel.currentItem.value
+    if (currentItem == null)
+        return
+    ScreenCard(modifier) {
+        Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+
+        Spacer(modifier = Modifier.height(12.dp))
+        TextField(
+            value = viewModel.answer.value,
+            onValueChange = { viewModel.answer.value = it },
+            label = { Text("Enter text", fontSize = 20.sp) },
+            textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = { viewModel.submit() }, Modifier
+            .fillMaxWidth()
+            .size(64.dp)) {
+            Text("Submit", fontSize = 25.sp)
+        }
+
+    }
+}
+
+@Composable
+private fun Answer(
+    viewModel: MainViewModel,
+    isAnswerCorrect: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val currentItem = viewModel.currentItem.value ?: return
+    ScreenCard(modifier) {
+
+        Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            if (isAnswerCorrect) "Correct" else "Wrong",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = if (isAnswerCorrect) Color.Green else Color.Red
+        )
+
+        Text(
+            "Your answer: ${viewModel.answer.value}",
+            fontSize = 25.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            "Correct: ${currentItem.reading}",
+            fontSize = 25.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            "Meaning: ${currentItem.meaning}",
+            fontSize = 25.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = { viewModel.next() }, Modifier
+            .fillMaxWidth()
+            .size(64.dp)) {
+            Text("Next", fontSize = 25.sp)
+        }
+    }
+
+}
+
+@Composable
+private fun ScreenCard(
+    modifier: Modifier = Modifier,
+    content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit
+) {
+    Card(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            content()
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
