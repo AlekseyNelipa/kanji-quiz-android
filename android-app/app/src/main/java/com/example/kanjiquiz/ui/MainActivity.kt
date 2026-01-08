@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.LocalTextStyle
@@ -19,8 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -96,6 +103,7 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val currentItem = viewModel.currentItem.value
     if (currentItem == null)
         return
+    val focusRequester = remember {FocusRequester()}
     ScreenCard(modifier) {
         Text(currentItem.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
 
@@ -108,7 +116,7 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             keyboardActions = KeyboardActions(onSend = { viewModel.submit() }),
             label = { Text("Enter text", fontSize = 20.sp) },
             textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
         )
 
         if(viewModel.validationMessage.value!="") {
@@ -122,6 +130,12 @@ private fun Question(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .size(64.dp)) {
             Text("Submit", fontSize = 25.sp)
+        }
+
+        val keyboardController = LocalSoftwareKeyboardController.current
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
         }
 
     }
