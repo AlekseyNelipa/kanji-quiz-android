@@ -22,11 +22,7 @@ class MainViewModel(private val repository: VocabRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            vocabList = withContext(Dispatchers.IO) {
-                repository.getAll()
-
-            }
-
+            vocabList = repository.getAll()
             reset()
         }
     }
