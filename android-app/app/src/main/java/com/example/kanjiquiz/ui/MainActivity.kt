@@ -50,26 +50,27 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
         when (viewModel.quizState.value) {
             QuizState.Question -> Question(
                 viewModel = viewModel,
-                modifier = Modifier.padding(innerPadding)
+                modifier = modifier
             )
 
             QuizState.CorrectAnswer -> Answer(
                 viewModel = viewModel,
                 isAnswerCorrect = true,
-                modifier = Modifier.padding(innerPadding)
+                modifier = modifier
             )
 
             QuizState.IncorrectAnswer -> Answer(
                 viewModel = viewModel,
                 isAnswerCorrect = false,
-                modifier = Modifier.padding(innerPadding)
+                modifier = modifier
             )
 
-            QuizState.Loading -> Loading(modifier = Modifier.padding(innerPadding))
-            QuizState.Empty -> Empty(modifier = Modifier.padding(innerPadding))
+            QuizState.Loading -> Loading(modifier = modifier)
+            QuizState.Empty -> Empty(modifier = modifier)
         }
     }
 }
