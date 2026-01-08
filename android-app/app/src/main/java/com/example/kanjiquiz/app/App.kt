@@ -3,11 +3,14 @@ package com.example.kanjiquiz.app
 import android.app.Application
 import androidx.room.Room
 import com.example.kanjiquiz.data.AppDb
-import com.example.kanjiquiz.data.RoomVocabRepository
+import com.example.kanjiquiz.data.VocabEntry
+import com.example.kanjiquiz.ui.VocabRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class App : Application() {
     lateinit var db: AppDb
-    lateinit var vocabRepository: RoomVocabRepository
+    lateinit var vocabRepository: VocabRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -16,6 +19,9 @@ class App : Application() {
             .fallbackToDestructiveMigration(false)
             .build()
 
-        vocabRepository = RoomVocabRepository(db.entriesDao())
+        vocabRepository = object : VocabRepository {
+            override suspend fun getAll(): List<VocabEntry> =
+                withContext(Dispatchers.IO) { db.entriesDao().getAll() }
+        }
     }
 }

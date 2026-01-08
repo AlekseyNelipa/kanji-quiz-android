@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kanjiquiz.app.App
 import com.example.kanjiquiz.data.VocabEntry
-import com.example.kanjiquiz.data.VocabRepository
 import com.example.kanjiquiz.ui.theme.KanjiQuizTheme
 
 

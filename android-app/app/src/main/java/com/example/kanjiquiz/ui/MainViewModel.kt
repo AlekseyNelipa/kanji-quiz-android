@@ -3,12 +3,9 @@ package com.example.kanjiquiz.ui
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kanjiquiz.data.VocabRepository
 import com.example.kanjiquiz.data.VocabEntry
 import dev.esnault.wanakana.core.Wanakana
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 enum class QuizState { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
 class MainViewModel(private val repository: VocabRepository) : ViewModel() {
