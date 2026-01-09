@@ -80,7 +80,7 @@ fun MainScreen() {
                     val context = LocalContext.current
                     val app = context.applicationContext as App
 
-                    val viewModel: MainViewModel = viewModel(
+                    val viewModel: QuizViewModel = viewModel(
                         viewModelStoreOwner = backStackEntry,
                         factory = QuizViewModelFactory(app.vocabRepository)
                     )
