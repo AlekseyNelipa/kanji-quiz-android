@@ -23,6 +23,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import com.example.kanjiquiz.app.App
+import com.example.kanjiquiz.ui.quizScreen.QuizScreen
+import com.example.kanjiquiz.ui.quizScreen.QuizViewModel
+import com.example.kanjiquiz.ui.settingsScreen.SettingsScreen
+import com.example.kanjiquiz.ui.settingsScreen.SettingsViewModel
 import com.example.kanjiquiz.ui.theme.KanjiQuizTheme
 
 

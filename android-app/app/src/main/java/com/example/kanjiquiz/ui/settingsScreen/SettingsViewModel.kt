@@ -1,7 +1,8 @@
-package com.example.kanjiquiz.ui
+package com.example.kanjiquiz.ui.settingsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kanjiquiz.domain.VocabRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

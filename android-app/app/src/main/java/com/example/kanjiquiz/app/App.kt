@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.kanjiquiz.data.AppDb
 import com.example.kanjiquiz.data.VocabEntry
-import com.example.kanjiquiz.ui.VocabRepository
+import com.example.kanjiquiz.domain.VocabRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

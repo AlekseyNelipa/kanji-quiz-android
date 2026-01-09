@@ -2,6 +2,9 @@ package com.example.kanjiquiz.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.kanjiquiz.domain.VocabRepository
+import com.example.kanjiquiz.ui.quizScreen.QuizViewModel
+import com.example.kanjiquiz.ui.settingsScreen.SettingsViewModel
 
 class ViewModelFactory(private val repo: VocabRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

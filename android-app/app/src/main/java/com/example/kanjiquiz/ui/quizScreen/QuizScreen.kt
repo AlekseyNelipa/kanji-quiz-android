@@ -1,12 +1,16 @@
-package com.example.kanjiquiz.ui
+package com.example.kanjiquiz.ui.quizScreen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -89,16 +93,20 @@ private fun Question(viewModel: QuizViewModel, modifier: Modifier = Modifier) {
                 .focusRequester(focusRequester)
         )
 
-        if(stateData.validationMessage!="") {
-            Text(stateData.validationMessage,
-                fontSize = 20.sp, color = Color.Red, modifier = Modifier.fillMaxWidth())
+        if (stateData.validationMessage != "") {
+            Text(
+                stateData.validationMessage,
+                fontSize = 20.sp, color = Color.Red, modifier = Modifier.fillMaxWidth()
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = { viewModel.submit() }, Modifier
-            .fillMaxWidth()
-            .size(64.dp)) {
+        Button(
+            onClick = { viewModel.submit() }, Modifier
+                .fillMaxWidth()
+                .size(64.dp)
+        ) {
             Text("Submit", fontSize = 25.sp)
         }
 
@@ -150,11 +158,28 @@ private fun Answer(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = { viewModel.next() }, Modifier
-            .fillMaxWidth()
-            .size(64.dp)) {
+        Button(
+            onClick = { viewModel.next() }, Modifier
+                .fillMaxWidth()
+                .size(64.dp)
+        ) {
             Text("Next", fontSize = 25.sp)
         }
     }
 
+}
+@Composable
+fun ScreenCard(
+    modifier: Modifier = Modifier,
+    content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit
+) {
+    Card(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            content()
+        }
+    }
 }
