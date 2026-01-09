@@ -11,6 +11,7 @@ composeBom = "2024.09.00"
 roomKtx = "2.8.4"
 ksp = "2.0.21-1.0.27"
 wanakanaAndroid = "1.1.1"
+navigationCompose = "2.9.6"
 
 
 [libraries]
@@ -32,6 +33,7 @@ androidx-room-runtime  = { group = "androidx.room", name = "room-runtime",  vers
 androidx-room-ktx      = { group = "androidx.room", name = "room-ktx",      version.ref = "roomKtx" } # you already have this
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomKtx" }
 wanakana-android = { module = "dev.esnault.wanakana:wanakana-android", version.ref = "wanakanaAndroid" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 
 [plugins]
