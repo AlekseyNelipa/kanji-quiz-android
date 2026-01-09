@@ -12,10 +12,16 @@ import kotlinx.coroutines.launch
 enum class QuizPhase { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
 
 class QuizViewModel(private val repository: VocabRepository) : ViewModel() {
+    data class UIState(
+        val currentEntry: VocabEntry? = null,
+        val quizPhase: QuizPhase = QuizPhase.Loading,
+        val answer: String = "",
+        var validationMessage: String = ""
+    )
 
     private var vocabList: List<VocabEntry> = emptyList()
-    private val _stateData = MutableStateFlow(QuizUiState())
-    val stateData: StateFlow<QuizUiState> = _stateData.asStateFlow()
+    private val _stateData = MutableStateFlow(UIState())
+    val stateData: StateFlow<UIState> = _stateData.asStateFlow()
 
     init {
         viewModelScope.launch {
