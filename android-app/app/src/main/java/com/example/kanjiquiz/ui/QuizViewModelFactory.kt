@@ -9,6 +9,10 @@ class QuizViewModelFactory(private val repo: VocabRepository) : ViewModelProvide
             @Suppress("UNCHECKED_CAST")
             return QuizViewModel(repo) as T
         }
+        if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return SettingsViewModel(repo) as T
+        }
         error("Unknown ViewModel class")
     }
 }

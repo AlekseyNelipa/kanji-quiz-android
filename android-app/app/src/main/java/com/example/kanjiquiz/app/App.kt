@@ -22,6 +22,9 @@ class App : Application() {
         vocabRepository = object : VocabRepository {
             override suspend fun getAll(): List<VocabEntry> =
                 withContext(Dispatchers.IO) { db.entriesDao().getAll() }
+
+            override suspend fun getAllTags(): List<String> =
+                withContext(Dispatchers.IO) { db.entriesDao().getAllTags() }
         }
     }
 }

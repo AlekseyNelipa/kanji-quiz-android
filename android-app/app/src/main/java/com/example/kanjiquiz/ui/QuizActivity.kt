@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,12 +38,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun SettingsScreen(modifier: Modifier) {
-    ScreenCard(modifier) {
-        Text("TODO: Settings Screen", fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
-    }
-}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,22 +66,26 @@ fun MainScreen() {
         },
     ) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
+        val context = LocalContext.current
+        val app = context.applicationContext as App
+        val factory = QuizViewModelFactory(app.vocabRepository)
         NavHost(
             navController,
             navController.createGraph("Quiz") {
                 composable("Quiz") { backStackEntry ->
-                    val context = LocalContext.current
-                    val app = context.applicationContext as App
-
                     val viewModel: QuizViewModel = viewModel(
                         viewModelStoreOwner = backStackEntry,
-                        factory = QuizViewModelFactory(app.vocabRepository)
+                        factory = factory
                     )
 
                     QuizScreen(viewModel, modifier)
                 }
                 composable("Settings") { backStackEntry ->
-                    SettingsScreen(modifier)
+                    val viewModel: SettingsViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = factory
+                    )
+                    SettingsScreen(viewModel, modifier)
                 }
             })
     }

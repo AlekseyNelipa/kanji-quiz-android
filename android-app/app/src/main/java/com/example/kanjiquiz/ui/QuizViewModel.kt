@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 enum class QuizPhase { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
+
 class QuizViewModel(private val repository: VocabRepository) : ViewModel() {
 
     private var vocabList: List<VocabEntry> = emptyList()

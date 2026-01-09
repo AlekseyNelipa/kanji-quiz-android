@@ -8,5 +8,8 @@ import androidx.room.Query
 interface VocabEntryDao {
     @Query("SELECT * FROM vocab")
     suspend fun getAll(): List<VocabEntry>
+
+    @Query("SELECT DISTINCT vocab_set FROM vocab")
+    suspend fun getAllTags(): List<String>
 }
 
