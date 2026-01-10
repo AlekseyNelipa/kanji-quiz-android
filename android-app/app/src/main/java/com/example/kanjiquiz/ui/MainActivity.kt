@@ -72,7 +72,7 @@ fun MainScreen() {
         val modifier = Modifier.padding(innerPadding)
         val context = LocalContext.current
         val app = context.applicationContext as App
-        val factory = ViewModelFactory(app.vocabRepository)
+        val factory = ViewModelFactory(app.domain)
         NavHost(
             navController,
             navController.createGraph("Quiz") {

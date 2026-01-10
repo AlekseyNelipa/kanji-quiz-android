@@ -2,39 +2,59 @@ package com.example.kanjiquiz.ui.settingsScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kanjiquiz.domain.VocabRepository
+import com.example.kanjiquiz.domain.Domain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
-class SettingsViewModel(private val repository: VocabRepository) : ViewModel() {
+class SettingsViewModel(val domain: Domain) : ViewModel() {
     data class UIState(
         val loading: Boolean = true,
         val allTags: List<String> = emptyList(),
         val selectedTags: Set<String> = emptySet()
     )
+
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
+
     init {
+
         viewModelScope.launch {
-            val tags = repository.getAllTags()
-            _uiState.value = UIState(
-                loading = false,
-                allTags = tags,
-                selectedTags = tags.toSet()
-            )
+            domain.state.map { it.loading }
+                .distinctUntilChanged()
+                .collect { loading ->
+                    _uiState.value = _uiState.value.copy(loading = loading)
+                }
         }
+
+        viewModelScope.launch {
+            domain.state.map { it.allTags }
+                .distinctUntilChanged()
+                .collect { tags ->
+                    _uiState.value = _uiState.value.copy(allTags = tags.sorted())
+                }
+        }
+
+        viewModelScope.launch {
+            domain.state.map { it.selectedTags }
+                .distinctUntilChanged()
+                .collect { tags ->
+                    _uiState.value = _uiState.value.copy(selectedTags = tags)
+                }
+        }
+
     }
 
     fun onCheckedChange(item: String, isChecked: Boolean) {
-        val current = _uiState.value
         val nextChecked =
-            if (isChecked) current.selectedTags + item
-            else current.selectedTags - item
+            if (isChecked) domain.state.value.selectedTags + item
+            else domain.state.value.selectedTags - item
 
-        _uiState.value = current.copy(selectedTags = nextChecked)
+        domain.updateSelectedTags(nextChecked)
     }
 }

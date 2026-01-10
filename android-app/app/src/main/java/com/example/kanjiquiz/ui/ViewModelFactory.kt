@@ -2,19 +2,19 @@ package com.example.kanjiquiz.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.kanjiquiz.domain.VocabRepository
+import com.example.kanjiquiz.domain.Domain
 import com.example.kanjiquiz.ui.quizScreen.QuizViewModel
 import com.example.kanjiquiz.ui.settingsScreen.SettingsViewModel
 
-class ViewModelFactory(private val repo: VocabRepository) : ViewModelProvider.Factory {
+class ViewModelFactory(private val domain: Domain) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(QuizViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return QuizViewModel(repo) as T
+            return QuizViewModel(domain) as T
         }
         if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SettingsViewModel(repo) as T
+            return SettingsViewModel(domain) as T
         }
         error("Unknown ViewModel class")
     }
