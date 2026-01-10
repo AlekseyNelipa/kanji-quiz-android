@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-enum class QuizPhase { Loading, Empty, Question, CorrectAnswer, IncorrectAnswer }
-
 class QuizViewModel(private val domain: Domain) : ViewModel() {
     data class UIState(
         val currentEntry: VocabEntry? = null,
