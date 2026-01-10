@@ -26,7 +26,7 @@ class Domain(private val repository: VocabRepository) {
         loaded = true
 
         val allTags = repository.getAllTags()
-        val allEntries = repository.getAll()
+        val allEntries = repository.getAllVocabEntries()
         _state.value = _state.value.copy(
             allEntries = allEntries,
             allTags = allTags,

@@ -22,13 +22,13 @@ class QuizViewModel(private val domain: Domain) : ViewModel() {
         val validationMessage: String = ""
     )
 
-    private val _stateData = MutableStateFlow(UIState())
-    val stateData: StateFlow<UIState> = _stateData.asStateFlow()
+    private val _uiState = MutableStateFlow(UIState())
+    val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             domain.state.map { it.selectedTags }.distinctUntilChanged().collect { tags ->
-                if (_stateData.value.currentEntry?.vocabSet !in tags) {
+                if (_uiState.value.currentEntry?.vocabSet !in tags) {
                     reset()
                 }
             }
@@ -39,18 +39,17 @@ class QuizViewModel(private val domain: Domain) : ViewModel() {
         }
     }
 
-
     fun setAnswer(answer: String) {
-        _stateData.value = _stateData.value.copy(answer = answer)
+        _uiState.value = _uiState.value.copy(answer = answer)
     }
 
     fun submit() {
         if (answerContainsKanji()) {
-            _stateData.value =
-                _stateData.value.copy(validationMessage = "Answer should not contain Kanji")
+            _uiState.value =
+                _uiState.value.copy(validationMessage = "Answer should not contain Kanji")
             return
         }
-        _stateData.value = _stateData.value.copy(
+        _uiState.value = _uiState.value.copy(
             validationMessage = "",
             quizPhase = if (isAnswerCorrect()) QuizPhase.CorrectAnswer else QuizPhase.IncorrectAnswer
         )
@@ -61,12 +60,12 @@ class QuizViewModel(private val domain: Domain) : ViewModel() {
     }
 
     private fun answerContainsKanji(): Boolean =
-        _stateData.value.answer.any(Wanakana::isKanji)
+        _uiState.value.answer.any(Wanakana::isKanji)
 
     private fun isAnswerCorrect(): Boolean {
-        val currentEntry = _stateData.value.currentEntry ?: return false
+        val currentEntry = _uiState.value.currentEntry ?: return false
 
-        val answer = _stateData.value.answer.trim().trim('～', '-')
+        val answer = _uiState.value.answer.trim().trim('～', '-')
         val hiraganaAnswer = Wanakana.toHiragana(answer)
 
         val reading = currentEntry.reading.trim().trim('～', '-')
@@ -75,7 +74,7 @@ class QuizViewModel(private val domain: Domain) : ViewModel() {
 
     private fun reset() {
         val currentEntry = domain.getRandomEntry()
-        _stateData.value = _stateData.value.copy(
+        _uiState.value = _uiState.value.copy(
             currentEntry = currentEntry,
             quizPhase = if (currentEntry == null) QuizPhase.Empty else QuizPhase.Question,
             answer = ""

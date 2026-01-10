@@ -33,7 +33,7 @@ class App : Application() {
         appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
         vocabRepository = object : VocabRepository {
-            override suspend fun getAll(): List<VocabEntry> =
+            override suspend fun getAllVocabEntries(): List<VocabEntry> =
                 withContext(Dispatchers.IO) { db.entriesDao().getAll() }
 
             override suspend fun getAllTags(): List<String> =

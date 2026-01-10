@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun QuizScreen(viewModel: QuizViewModel, modifier: Modifier) {
-    val stateData by viewModel.stateData.collectAsState()
+    val stateData by viewModel.uiState.collectAsState()
     when (stateData.quizPhase) {
         QuizPhase.Question -> Question(
             viewModel = viewModel,
@@ -72,7 +72,7 @@ private fun Empty(modifier: Modifier) {
 
 @Composable
 private fun Question(viewModel: QuizViewModel, modifier: Modifier = Modifier) {
-    val stateData by viewModel.stateData.collectAsState()
+    val stateData by viewModel.uiState.collectAsState()
     val currentEntry = stateData.currentEntry ?: return
 
     val focusRequester = remember {FocusRequester()}
@@ -125,7 +125,7 @@ private fun Answer(
     isAnswerCorrect: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val stateData by viewModel.stateData.collectAsState()
+    val stateData by viewModel.uiState.collectAsState()
     val currentEntry = stateData.currentEntry ?: return
     ScreenCard(modifier) {
 
