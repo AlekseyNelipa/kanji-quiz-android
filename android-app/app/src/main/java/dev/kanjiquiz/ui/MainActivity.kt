@@ -1,4 +1,4 @@
-package com.example.kanjiquiz.ui
+package dev.kanjiquiz.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,12 +22,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
-import com.example.kanjiquiz.app.App
-import com.example.kanjiquiz.ui.quizScreen.QuizScreen
-import com.example.kanjiquiz.ui.quizScreen.QuizViewModel
-import com.example.kanjiquiz.ui.settingsScreen.SettingsScreen
-import com.example.kanjiquiz.ui.settingsScreen.SettingsViewModel
-import com.example.kanjiquiz.ui.theme.KanjiQuizTheme
+import dev.kanjiquiz.app.App
+import dev.kanjiquiz.ui.quizScreen.QuizScreen
+import dev.kanjiquiz.ui.quizScreen.QuizViewModel
+import dev.kanjiquiz.ui.settingsScreen.SettingsScreen
+import dev.kanjiquiz.ui.settingsScreen.SettingsViewModel
+import dev.kanjiquiz.ui.theme.KanjiQuizTheme
 
 
 class MainActivity : ComponentActivity() {

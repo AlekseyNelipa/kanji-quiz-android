@@ -1,4 +1,4 @@
-package com.example.kanjiquiz.data
+package dev.kanjiquiz.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

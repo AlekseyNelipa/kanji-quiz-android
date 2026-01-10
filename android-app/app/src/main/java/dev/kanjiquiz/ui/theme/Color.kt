@@ -1,4 +1,4 @@
-package com.example.kanjiquiz.ui.theme
+package dev.kanjiquiz.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

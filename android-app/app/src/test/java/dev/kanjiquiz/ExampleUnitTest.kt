@@ -1,4 +1,4 @@
-package com.example.kanjiquiz
+package dev.kanjiquiz
 
 import org.junit.Test
 

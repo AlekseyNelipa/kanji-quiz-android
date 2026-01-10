@@ -1,4 +1,4 @@
-package com.example.kanjiquiz.ui.settingsScreen
+package dev.kanjiquiz.ui.settingsScreen
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize

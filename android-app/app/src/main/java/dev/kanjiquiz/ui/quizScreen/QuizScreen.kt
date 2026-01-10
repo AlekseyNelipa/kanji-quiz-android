@@ -1,4 +1,4 @@
-package com.example.kanjiquiz.ui.quizScreen
+package dev.kanjiquiz.ui.quizScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

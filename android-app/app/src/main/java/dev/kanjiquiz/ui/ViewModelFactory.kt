@@ -1,10 +1,10 @@
-package com.example.kanjiquiz.ui
+package dev.kanjiquiz.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.kanjiquiz.domain.Domain
-import com.example.kanjiquiz.ui.quizScreen.QuizViewModel
-import com.example.kanjiquiz.ui.settingsScreen.SettingsViewModel
+import dev.kanjiquiz.domain.Domain
+import dev.kanjiquiz.ui.quizScreen.QuizViewModel
+import dev.kanjiquiz.ui.settingsScreen.SettingsViewModel
 
 class ViewModelFactory(private val domain: Domain) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

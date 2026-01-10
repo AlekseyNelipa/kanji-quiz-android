@@ -1,6 +1,6 @@
-package com.example.kanjiquiz.domain
+package dev.kanjiquiz.domain
 
-import com.example.kanjiquiz.data.VocabEntry
+import dev.kanjiquiz.data.VocabEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kanjiquiz"
+    namespace = "dev.kanjiquiz"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.kanjiquiz"
+        applicationId = "dev.kanjiquiz"
         minSdk = 25
         targetSdk = 36
         versionCode = 1

@@ -1,9 +1,9 @@
-package com.example.kanjiquiz.ui.quizScreen
+package dev.kanjiquiz.ui.quizScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kanjiquiz.data.VocabEntry
-import com.example.kanjiquiz.domain.Domain
+import dev.kanjiquiz.data.VocabEntry
+import dev.kanjiquiz.domain.Domain
 import dev.esnault.wanakana.core.Wanakana
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

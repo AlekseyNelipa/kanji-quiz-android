@@ -1,11 +1,11 @@
-package com.example.kanjiquiz.app
+package dev.kanjiquiz.app
 
 import android.app.Application
 import androidx.room.Room
-import com.example.kanjiquiz.data.AppDb
-import com.example.kanjiquiz.data.VocabEntry
-import com.example.kanjiquiz.domain.Domain
-import com.example.kanjiquiz.domain.VocabRepository
+import dev.kanjiquiz.data.AppDb
+import dev.kanjiquiz.data.VocabEntry
+import dev.kanjiquiz.domain.Domain
+import dev.kanjiquiz.domain.VocabRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
