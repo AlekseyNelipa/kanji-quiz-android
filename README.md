@@ -1,10 +1,7 @@
 # JLPT Kanji Reading Quiz (Android)
 
-An Android application for testing knowledge of Japanese word readings.
-The app presents a word written in kanji and prompts the user to enter its
-reading, using either hiragana or romaji.
-
-The application is non-commercial.
+An Android application for testing the knowledge of readings of Japanese words that include kanji.
+The app presents a word and prompts the user to enter its reading, using either hiragana or romaji.
 
 ---
 
