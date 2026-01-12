@@ -1,6 +1,7 @@
 package dev.kanjiquiz.app
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import dev.kanjiquiz.data.AppDb
 import dev.kanjiquiz.data.VocabEntry
@@ -23,8 +24,13 @@ class App : Application() {
     lateinit var domain: Domain
         private set
 
+
     override fun onCreate() {
         super.onCreate()
+
+        if (isFirstTimeSinceUpdate()) {
+            applicationContext.deleteDatabase("vocab.db")
+        }
         val db = Room.databaseBuilder(applicationContext, AppDb::class.java, "vocab.db")
             .createFromAsset("vocab.db")
             .fallbackToDestructiveMigration(false)
@@ -44,5 +50,17 @@ class App : Application() {
         appScope.launch {
             domain.loadAll()
         }
+    }
+
+    private fun isFirstTimeSinceUpdate(): Boolean {
+        val prefs = applicationContext.getSharedPreferences("version_prefs", MODE_PRIVATE)
+        val currentVersion = applicationContext.packageManager
+            .getPackageInfo(applicationContext.packageName, 0)
+            .longVersionCode
+        val last = prefs.getLong("version", 0L)
+        val prefEditor = prefs.edit()
+        prefEditor.putLong("version", currentVersion)
+        prefEditor.commit()
+        return currentVersion != last
     }
 }
