@@ -23,7 +23,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier) {
     }
 
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(viewModel.uiState.value.allTags) { tag ->
+        items(state.allTags) { tag ->
             val checked = tag in state.selectedTags
 
             Row(
