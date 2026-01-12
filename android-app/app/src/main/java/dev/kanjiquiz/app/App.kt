@@ -1,7 +1,6 @@
 package dev.kanjiquiz.app
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import dev.kanjiquiz.data.AppDb
 import dev.kanjiquiz.data.VocabEntry
@@ -16,6 +15,9 @@ import kotlinx.coroutines.withContext
 class App : Application() {
 
     lateinit var vocabRepository: VocabRepository
+        private set
+
+    lateinit var settingsRepository: SettingsRepository
         private set
 
     lateinit var appScope: CoroutineScope
@@ -46,7 +48,21 @@ class App : Application() {
                 withContext(Dispatchers.IO) { db.entriesDao().getAllTags() }
         }
 
-        domain = Domain(vocabRepository)
+        settingsRepository = object : SettingsRepository {
+            override fun loadSettings(): Set<String>? {
+                val prefs = applicationContext.getSharedPreferences("settings", MODE_PRIVATE)
+                return prefs.getStringSet("tags", null)?.toSet()
+            }
+
+            override fun saveSettings(tags: Set<String>) {
+                val prefs = applicationContext.getSharedPreferences("settings", MODE_PRIVATE)
+                val prefEditor = prefs.edit()
+                prefEditor.putStringSet("tags",tags)
+                prefEditor.commit()
+            }
+        }
+
+        domain = Domain(vocabRepository, settingsRepository)
         appScope.launch {
             domain.loadAll()
         }

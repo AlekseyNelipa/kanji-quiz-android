@@ -1,11 +1,12 @@
 package dev.kanjiquiz.domain
 
+import dev.kanjiquiz.app.SettingsRepository
 import dev.kanjiquiz.data.VocabEntry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class Domain(private val repository: VocabRepository) {
+class Domain(private val repository: VocabRepository, private val settingsRepository: SettingsRepository) {
 
     data class DomainState(
         val loading: Boolean = true,
@@ -25,13 +26,18 @@ class Domain(private val repository: VocabRepository) {
             return
         loaded = true
 
+        val savedSelectedTags = settingsRepository.loadSettings()
         val allTags = repository.getAllTags()
         val allEntries = repository.getAllVocabEntries()
+        val selectedTags = savedSelectedTags?.intersect(allTags.toSet()) ?: allTags.toSet()
+        val selectedEntries = allEntries
+            .filter { it.vocabSet in selectedTags }
+            .toList()
         _state.value = _state.value.copy(
             allEntries = allEntries,
             allTags = allTags,
-            selectedEntries = allEntries.toList(),
-            selectedTags = allTags.toSet(),
+            selectedEntries = selectedEntries,
+            selectedTags = selectedTags,
             loading = false )
     }
 
@@ -43,5 +49,6 @@ class Domain(private val repository: VocabRepository) {
                 .filter { it.vocabSet in selectedTags }
                 .toList(),
         )
+        settingsRepository.saveSettings(selectedTags)
     }
 }
