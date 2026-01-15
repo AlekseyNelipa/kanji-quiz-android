@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.kanjiquiz"
-        minSdk = 25
+        minSdk = 28
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
