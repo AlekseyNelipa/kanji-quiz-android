@@ -86,7 +86,7 @@ private fun Question(viewModel: QuizViewModel, modifier: Modifier = Modifier) {
             onValueChange = viewModel::setAnswer,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
             keyboardActions = KeyboardActions(onSend = { viewModel.submit() }),
-            label = { Text("Enter text", fontSize = 20.sp) },
+            label = { Text("Enter reading", fontSize = 20.sp) },
             textStyle = LocalTextStyle.current.copy(fontSize = 25.sp),
             modifier = Modifier
                 .fillMaxWidth()
