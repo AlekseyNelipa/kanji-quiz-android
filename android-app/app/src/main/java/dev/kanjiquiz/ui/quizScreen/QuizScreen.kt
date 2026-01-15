@@ -77,7 +77,7 @@ private fun Question(viewModel: QuizViewModel, modifier: Modifier = Modifier) {
 
     val focusRequester = remember {FocusRequester()}
     ScreenCard(modifier) {
-        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth(), lineHeight = 50.sp)
 
         Spacer(modifier = Modifier.height(12.dp))
         TextField(
@@ -129,7 +129,7 @@ private fun Answer(
     val currentEntry = stateData.currentEntry ?: return
     ScreenCard(modifier) {
 
-        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth())
+        Text(currentEntry.expression, fontSize = 50.sp, modifier = Modifier.fillMaxWidth(), lineHeight = 50.sp)
 
         Spacer(modifier = Modifier.height(12.dp))
 
