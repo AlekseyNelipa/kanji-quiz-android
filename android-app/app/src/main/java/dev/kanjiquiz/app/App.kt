@@ -5,6 +5,7 @@ import androidx.room.Room
 import dev.kanjiquiz.data.AppDb
 import dev.kanjiquiz.data.VocabEntry
 import dev.kanjiquiz.domain.Domain
+import dev.kanjiquiz.domain.EntrySelector
 import dev.kanjiquiz.domain.VocabRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,9 @@ class App : Application() {
         private set
 
     lateinit var settingsRepository: SettingsRepository
+        private set
+
+    lateinit var entrySelector: EntrySelector
         private set
 
     lateinit var appScope: CoroutineScope
@@ -62,7 +66,11 @@ class App : Application() {
             }
         }
 
-        domain = Domain(vocabRepository, settingsRepository)
+        entrySelector = object : EntrySelector {
+            override fun selectEntry(entries: List<VocabEntry>): VocabEntry? = entries.randomOrNull()
+        }
+
+        domain = Domain(vocabRepository, settingsRepository, entrySelector)
         appScope.launch {
             domain.loadAll()
         }

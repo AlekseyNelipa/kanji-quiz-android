@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class Domain(private val repository: VocabRepository, private val settingsRepository: SettingsRepository) {
+class Domain(
+    private val repository: VocabRepository,
+    private val settingsRepository: SettingsRepository,
+    private val entrySelector: EntrySelector) {
 
     data class DomainState(
         val loading: Boolean = true,
@@ -41,7 +44,9 @@ class Domain(private val repository: VocabRepository, private val settingsReposi
             loading = false )
     }
 
-    fun getRandomEntry(): VocabEntry? = _state.value.selectedEntries.randomOrNull()
+    fun getRandomEntry(): VocabEntry? =
+        entrySelector.selectEntry(_state.value.selectedEntries)
+
     fun updateSelectedTags(selectedTags: Set<String>) {
         _state.value = _state.value.copy(
             selectedTags = selectedTags,
