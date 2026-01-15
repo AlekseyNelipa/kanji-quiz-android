@@ -7,11 +7,11 @@ The app presents a word and prompts the user to enter its reading, using either 
 
 ## Data source
 
-This application uses vocabulary data derived from the **JLPT Word List**:
+This application uses vocabulary data derived from the **open-anki-jlpt-decks**:
 
-https://github.com/elzup/jlpt-word-list
+https://github.com/jamsinclair/open-anki-jlpt-decks
 
-Author: elzup  
+Author: jamsinclair  
 License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)  
 License text: https://creativecommons.org/licenses/by-sa/4.0/
 

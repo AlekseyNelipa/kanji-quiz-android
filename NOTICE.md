@@ -1,12 +1,12 @@
 # Third-Party Data Notices
 
-This project uses data from **JLPT Word List**.
+This project uses data from **open-anki-jlpt-decks**.
 
 Source repository:
-https://github.com/elzup/jlpt-word-list
+https://github.com/jamsinclair/open-anki-jlpt-decks
 
 Author:
-elzup
+jamsinclair
 
 License:
 Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
