@@ -12,6 +12,7 @@ roomKtx = "2.8.4"
 ksp = "2.0.21-1.0.27"
 wanakanaAndroid = "1.1.1"
 navigationCompose = "2.9.6"
+coroutines = "1.7.3"
 
 
 [libraries]
@@ -34,7 +35,7 @@ androidx-room-ktx      = { group = "androidx.room", name = "room-ktx",      vers
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomKtx" }
 wanakana-android = { module = "dev.esnault.wanakana:wanakana-android", version.ref = "wanakanaAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
