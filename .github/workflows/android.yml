@@ -31,9 +31,10 @@ jobs:
       working-directory: android-app
       run: ./gradlew test
 
-            # --- CI path (PR/main): build debug (unsigned) ---
+    # --- CI path (PR/main): build debug (unsigned) ---
     - name: Build debug APK
       if: env.IS_RELEASE != 'true'
+      working-directory: android-app
       run: ./gradlew assembleDebug
 
     - name: Upload debug APK
@@ -44,7 +45,6 @@ jobs:
         path: android-app/**/build/outputs/apk/debug/*.apk
 
     # --- Release path (tag v*): build signed release + publish ---
-
     - name: Decode keystore
       if: env.IS_RELEASE == 'true'
       working-directory: android-app
